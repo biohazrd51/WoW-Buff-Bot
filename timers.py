@@ -13,7 +13,7 @@ dbopen = sqlite.connect(dbpath)
 dbref = dbopen.cursor()
 
 #Sets up database table if doesn't exist
-dbref.execute('''create table if not exists timers (timertype TEXT, timestamp NUMERIC, lastseen NUMBERIC)''')
+dbref.execute('''create table if not exists timers (timertype TEXT, timestamp NUMERIC, lastseen NUMERIC)''')
 dbopen.commit()
 
 #Attempts to select data from table to validate base information, creates if necessary
