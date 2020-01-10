@@ -3,7 +3,7 @@
 This bot was developed for guild tracking of the Dragonslayer and Warchief's Blessing buffs.  It uses [discordpy](https://discordpy.readthedocs.io/en/latest/) and [sqlite3](https://docs.python.org/3/library/sqlite3.html)
 
 
-###Current features/commands
+##Current features/commands
 
 * Setting Onyxia head turn in ($ony)
 * Setting Rend head turn in ($wcb)
@@ -11,7 +11,7 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 * View timers showing last know turn in and time until next available turn in ($timers)
 
 
-###How to use
+##How to use
 
 * Follow [instructions](https://discordpy.readthedocs.io/en/latest/discord.html) for setting up a discord bot
 * Download timers.py and open in a text editor
@@ -21,14 +21,14 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 * Use $help to see additional information
 
 
-###Examples
+##Examples
 
 ![Example1](https://i.imgur.com/WRlj0Dt.png)
 ![Example2](https://i.imgur.com/iESeQP2.png)
 ![Example3](https://i.imgur.com/OmfmkH7.png)
 
 
-###Bugs and issues
+##Bugs and issues
 
 * The time used is the time of the machine the bot runs on.  Needs to be updated to appropriately handle timezones.
 * Occassionally when registering a head turn in, the bot will not respond, but the time/reminder is set.
