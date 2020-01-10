@@ -1,6 +1,6 @@
 # Discord WoW Buff Bot
 
-This bot was developed for guild tracking of the Dragonslayer and Warchief's Blessing buffs.  It uses [discordpy](https://discordpy.readthedocs.io/en/latest/) and [sqlite3](https://docs.python.org/3/library/sqlite3.html)
+This bot was developed for guild tracking of the Dragonslayer and Warchief's Blessing buffs.  It uses [discordpy](https://discordpy.readthedocs.io/en/latest/) and [sqlite3](https://docs.python.org/3/library/sqlite3.html).
 
 
 ### Current features/commands
@@ -8,7 +8,7 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 * Setting Onyxia head turn in ($ony)
 * Setting Rend head turn in ($wcb)
 * Automatic alert roughly 3-5 minutes before next turn in is available
-* View timers showing last know turn in and time until next available turn in ($timers)
+* View timers showing last known turn in and time until next available turn in ($timers)
 
 
 ### How to use
@@ -17,7 +17,7 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 * Download timers.py and open in a text editor
 * In Discord, right click on the channel you wish the bot to alert in, and select 'Copy ID', paste this into 'channelid' variable
 * From the bot setup above, copy the token and paste into the 'botkey' variable
-* Anyone with write permissions to the channel will be able to use the bot commands.  Select appropriate Discord permissions if this channel is public. (Recommend only guild members can set the bot, but public can read the channel).
+* Anyone with write permissions to the channel will be able to use the bot commands.  Select appropriate Discord permissions if this channel is public. (Recommend only guild members can write to channel, but public can read the channel).
 * Use $help to see additional information
 
 
