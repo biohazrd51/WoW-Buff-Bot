@@ -1,6 +1,6 @@
 # Discord WoW Buff Bot
 
-This bot was developed for guild tracking of the Dragonslayer and Warchief's Blessing buffs.  It uses [discordpy](https://discordpy.readthedocs.io/en/latest/) and [sqlite3](https://docs.python.org/3/library/sqlite3.html).
+This bot was developed for guild tracking of the Dragonslayer and Warchief's Blessing buffs.  It uses [discordpy](https://discordpy.readthedocs.io/en/latest/), [sqlite3](https://docs.python.org/3/library/sqlite3.html), and [pytz](http://pytz.sourceforge.net/).
 
 
 ### Current features/commands
@@ -17,6 +17,7 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 * Download timers.py and open in a text editor
 * In Discord, right click on the channel you wish the bot to alert in, and select 'Copy ID', paste this into 'channelid' variable
 * From the bot setup above, copy the token and paste into the 'botkey' variable
+* Update 'bottime' variable with timezone of WoW server (default US/Eastern)
 * Anyone with write permissions to the channel will be able to use the bot commands.  Select appropriate Discord permissions if this channel is public. (Recommend only guild members can write to channel, but public can read the channel).
 * Use $help to see additional information
 
@@ -30,5 +31,5 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 
 ### Bugs and issues
 
-* The time used is the time of the machine the bot runs on.  Needs to be updated to appropriately handle timezones.
+* ~~The time used is the time of the machine the bot runs on.  Needs to be updated to appropriately handle timezones.~~ (Updated)
 * ~~Occassionally when registering a head turn in, the bot will not respond, but the time/reminder is set.~~ (Fixed)
