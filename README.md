@@ -31,4 +31,4 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 ### Bugs and issues
 
 * The time used is the time of the machine the bot runs on.  Needs to be updated to appropriately handle timezones.
-* Occassionally when registering a head turn in, the bot will not respond, but the time/reminder is set.
+* ~~Occassionally when registering a head turn in, the bot will not respond, but the time/reminder is set.~~ (Fixed)
