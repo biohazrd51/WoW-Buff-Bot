@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import sqlite3 as sqlite
 from datetime import datetime, timedelta
-import pytz
 import sys, os
 import asyncio
 
