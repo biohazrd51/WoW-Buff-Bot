@@ -63,7 +63,10 @@ async def ony(ctx):
         dbopen.commit()
         onyturnin = 'Got it! The head was turned in at ' + timerset.strftime("%Y-%m-%d %H:%M") + ' and the next window should open at ' + timerplus.strftime("%Y-%m-%d %H:%M")
         onyemb.add_field(name="Dragonslayer Timer Set", value=onyturnin, inline=True)
-        onyemb.set_footer(text="Added by " + ctx.message.author.nick, icon_url=ctx.message.author.avatar_url)
+        if ctx.message.author.nick is None:
+            onyemb.set_footer(text="Added by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+        else:
+            onyemb.set_footer(text="Added by " + ctx.message.author.nick, icon_url=ctx.message.author.avatar_url)
         await channel.send(embed=onyemb)
         onyemb.clear_fields() #Clears field from embed for next event
         onyemb.set_footer(text="", icon_url="") #Clears footer manually, as footer has no clear method
@@ -79,7 +82,10 @@ async def wcb(ctx):
         dbopen.commit()
         wcbturnin = 'Got it! The head was turned in at ' + timerset.strftime("%Y-%m-%d %H:%M") + ' and the next window should open at ' + timerplus.strftime("%Y-%m-%d %H:%M")
         wcbemb.add_field(name="Warchief's Timer Set", value=wcbturnin, inline=True)
-        wcbemb.set_footer(text="Added by " + ctx.message.author.nick, icon_url=ctx.message.author.avatar_url)
+        if ctx.message.author.nick is None:
+            wcbemb.set_footer(text="Added by " + ctx.message.author.name, icon_url=ctx.message.author.avatar_url)
+        else:
+            wcbemb.set_footer(text="Added by " + ctx.message.author.nick, icon_url=ctx.message.author.avatar_url)
         await channel.send(embed=wcbemb)
         wcbemb.clear_fields() #Clears field from embed for next event
         wcbemb.set_footer(text="", icon_url="") #Clears footer manually, as footer has no clear method
