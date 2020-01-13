@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import sqlite3 as sqlite
 from datetime import datetime, timedelta
+from pytz import timezone
 import sys, os
 import asyncio
 
@@ -43,6 +44,7 @@ timeremb.set_thumbnail(url="https://i.imgur.com/nWXgNsz.jpg")
 #testchannelid = #Test channel, if needed: uncomment, switch bot.get_channel(channelid) from channelid to testchannelid
 channelid = #This restricts the bot to receiving commands, and speaking, only in this channel. Use discord permissions appropriately.
 botkey = ''
+bottime = 'US/Eastern' #Set to timezone of wow server
 
 @bot.command(name='info', brief="Info on the bot", description="Thrown together bot")
 async def botinfo(ctx):
@@ -56,9 +58,9 @@ async def ony(ctx):
     if ctx.channel.id == channelid:
         channel = bot.get_channel(channelid)
         bufftype = "ony"
-        timerset = datetime.now() #I'm lazy and bot time is also WoW server time. Needs TZ rewrite
+        timerset = datetime.now(timezone(bottime))
         timerplus = timerset + timedelta(hours=6)
-        dbref.execute('''update timers set timestamp = ?, lastseen = ? where timertype = ?''', (timerplus, timerset.strftime("%Y-%m-%d %H:%M"), bufftype))
+        dbref.execute('''update timers set timestamp = ?, lastseen = ? where timertype = ?''', (timerplus.strftime("%Y-%m-%d %H:%M:%S.%f"), timerset.strftime("%Y-%m-%d %H:%M"), bufftype))
         dbopen.commit()
         onyturnin = 'Got it! The head was turned in at ' + timerset.strftime("%Y-%m-%d %H:%M") + ' and the next window should open at ' + timerplus.strftime("%Y-%m-%d %H:%M")
         onyemb.add_field(name="Dragonslayer Timer Set", value=onyturnin, inline=True)
@@ -75,9 +77,9 @@ async def wcb(ctx):
     if ctx.channel.id == channelid:
         channel = bot.get_channel(channelid)
         bufftype = "wcb"
-        timerset = datetime.now() #I'm lazy and bot time is also WoW server time. This will need to b rewritten to handle timezones
+        timerset = datetime.now(timezone(bottime))
         timerplus = timerset + timedelta(hours=3)
-        dbref.execute('''update timers set timestamp = ?, lastseen = ? where timertype = ?''', (timerplus, timerset.strftime("%Y-%m-%d %H:%M"), bufftype))
+        dbref.execute('''update timers set timestamp = ?, lastseen = ? where timertype = ?''', (timerplus.strftime("%Y-%m-%d %H:%M:%S.%f"), timerset.strftime("%Y-%m-%d %H:%M"), bufftype))
         dbopen.commit()
         wcbturnin = 'Got it! The head was turned in at ' + timerset.strftime("%Y-%m-%d %H:%M") + ' and the next window should open at ' + timerplus.strftime("%Y-%m-%d %H:%M")
         wcbemb.add_field(name="Warchief's Timer Set", value=wcbturnin, inline=True)
