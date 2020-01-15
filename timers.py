@@ -13,7 +13,7 @@ dbopen = sqlite.connect(dbpath)
 dbref = dbopen.cursor()
 
 #Sets up database table if doesn't exist
-dbref.execute('''create table if not exists timers (timertype TEXT, timestamp NUMERIC, lastseen NUMERIC)''')
+dbref.execute('''create table if not exists timers (timertype TEXT, timestamp NUMERIC, lastseen NUMERIC, users INTEGER, usertype TEXT)''')
 dbopen.commit()
 
 #Attempts to select data from table to validate base information, creates if necessary
@@ -108,7 +108,7 @@ async def timers(ctx):
                         wcbbuff = "Warchief's: \nNo timer is available. \nLast turn in was seen at " + lastseen + '\n'
                 elif timestamp is not None:
                     timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
-                    timenow = datetime.now()
+                    timenow = datetime.now(timezone(bottime))
                     timecalc = timestamp - timenow
                     timedursec = timecalc.total_seconds()
                     timetobuff = divmod(timedursec, 3600) #Gives datetime object in hours/seconds remainder, as float, [0] is hours, and [1] is second
@@ -126,12 +126,22 @@ async def timers(ctx):
         await channel.send(embed=timeremb)
         timeremb.clear_fields()
 
+@bot.command(name='remindme', brief="Registers you for reminderPM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening\nExample: $remindme wcb")
+async def remindme(ctx, arg1):
+    if ctx.guild is None:
+        usertype = arg1
+        userid = ctx.message.author.id
+        channeluser = bot.get_user(userid)
+        dbref.execute('''insert into timers(users, usertype) values (?,?)''', (userid, usertype,))
+        dbopen.commit()
+        await channeluser.send("Got it! I will send you a reminder!")
+
 #Loops every 60 seconds to check for upcoming timers
 async def real_notify():
     await bot.wait_until_ready()
     channel = bot.get_channel(channelid)
     while not bot.is_closed():
-        notifytime = datetime.now() + timedelta(seconds=300) #Adds 5 minutes to current time
+        notifytime = datetime.now(timezone(bottime)) + timedelta(seconds=300) #Adds 5 minutes to current time
         dbref.execute('''select timertype, timestamp, lastseen from timers where ? > timestamp''', (notifytime,)) #Searches for any timer coming up in the next 5 minutes
         notifications = dbref.fetchall()
         if notifications is not None:
@@ -146,12 +156,28 @@ async def real_notify():
                     dbref.execute('''update timers set timestamp = ? where timertype = ?''', (setnull, onytype,)) #Clears existing timer
                     onyemb.add_field(name="Dragonslayer Window Opening: ", value=onybuff, inline=True)
                     await channel.send(embed=onyemb)
+                    dbref.execute('''select users from timers where usertype = ?''', (onytype,))
+                    userlist = dbref.fetchall()
+                    if userlist is not None:
+                        for userid in userlist:
+                            channeluser = bot.get_user(int(userid[0]))
+                            await channeluser.send(embed=onyemb)
+                            dbref.execute('''delete from timers where users = ? and usertype = ?''', (userid[0], onytype,))
+                        dbopen.commit()
                     onyemb.clear_fields()
                 elif timertype == wcbtype:
                     wcbbuff = "The window for Warchief's opens soon! (Last known turn-in was " + lastseen + ')'
                     dbref.execute('''update timers set timestamp = ? where timertype = ?''', (setnull, wcbtype,)) #Clears existing timer
                     wcbemb.add_field(name="Warchief's Window Opening: ", value=wcbbuff, inline=True)
                     await channel.send(embed=wcbemb)
+                    dbref.execute('''select users from timers where usertype = ?''', (wcbtype,))
+                    userlist = dbref.fetchall()
+                    if userlist is not None:
+                        for userid in userlist:
+                            channeluser = bot.get_user(int(userid[0]))
+                            await channeluser.send(embed=wcbemb)
+                            dbref.execute('''delete from timers where users = ? and usertype = ?''', (userid[0], wcbtype,))
+                        dbopen.commit()
                     wcbemb.clear_fields()
             dbopen.commit()
         await asyncio.sleep(60)
