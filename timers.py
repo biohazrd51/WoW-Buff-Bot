@@ -126,7 +126,7 @@ async def timers(ctx):
         await channel.send(embed=timeremb)
         timeremb.clear_fields()
 
-@bot.command(name='remindme', brief="Registers you for reminder DM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening. Options are: ony, wcb, all\nExample: $remindme wcb\nThis MUST be in a DM to the bot. Typing this in the discord channel will not work.")
+@bot.command(name='remindme', brief="Registers you for reminder DM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening. Options are: ony, wcb, all\n\nExample: $remindme wcb\n\nThis MUST be in a DM to the bot. Typing this in the discord channel will not work.")
 async def remindme(ctx, arg1):
     if ctx.guild is None: #Determines is message is DM
         usertype = arg1
