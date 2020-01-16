@@ -42,7 +42,7 @@ timeremb.set_thumbnail(url="https://i.imgur.com/nWXgNsz.jpg")
 
 #Variables to be used.  Channel ID required for specific channel use.  Bot key for bot to login
 #testchannelid = #Test channel, if needed: uncomment, switch bot.get_channel(channelid) from channelid to testchannelid
-channelid = #This restricts the bot to receiving commands, and speaking, only in this channel. Use discord permissions appropriately.
+channelid = 0 #This restricts the bot to receiving commands, and speaking, only in this channel. Use discord permissions appropriately.
 botkey = ''
 bottime = 'US/Eastern' #Set to timezone of wow server
 
@@ -126,15 +126,24 @@ async def timers(ctx):
         await channel.send(embed=timeremb)
         timeremb.clear_fields()
 
-@bot.command(name='remindme', brief="Registers you for reminderPM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening\nExample: $remindme wcb")
+@bot.command(name='remindme', brief="Registers you for reminder DM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening\nExample: $remindme wcb")
 async def remindme(ctx, arg1):
-    if ctx.guild is None:
-        usertype = arg1
+    if ctx.guild is None: #Determines is message is DM
+        usertype = arg1 #To be updated, valid args should be 'ony', 'wcb', and possibly 'all'
         userid = ctx.message.author.id
-        channeluser = bot.get_user(userid)
+        channeluser = bot.get_user(userid) #Creates user object to DM from ID above
         dbref.execute('''insert into timers(users, usertype) values (?,?)''', (userid, usertype,))
         dbopen.commit()
         await channeluser.send("Got it! I will send you a reminder!")
+
+@bot.command(name='removeme', brief="Removes you from future notifications", description="Will remove you from ALL notification DMs until you re-register")
+async def removeme(ctx):
+    if ctx.guild is None: #Determines if message is DM
+        userid = ctx.message.author.id
+        channeluser = bot.get_user(userid) #Creates user object to DM from ID above
+        dbref.execute('''delete from timers where users = ?''', (userid,))
+        dbopen.commit()
+        await channeluser.send("You have been removed from futher notification DMs! You can re-register using $remindme")
 
 #Loops every 60 seconds to check for upcoming timers
 async def real_notify():
@@ -156,13 +165,13 @@ async def real_notify():
                     dbref.execute('''update timers set timestamp = ? where timertype = ?''', (setnull, onytype,)) #Clears existing timer
                     onyemb.add_field(name="Dragonslayer Window Opening: ", value=onybuff, inline=True)
                     await channel.send(embed=onyemb)
-                    dbref.execute('''select users from timers where usertype = ?''', (onytype,))
+                    dbref.execute('''select users from timers where usertype = ?''', (onytype,)) #Selects user ids that DM bot requesting notification
                     userlist = dbref.fetchall()
                     if userlist is not None:
                         for userid in userlist:
-                            channeluser = bot.get_user(int(userid[0]))
+                            channeluser = bot.get_user(int(userid[0])) #Gets user object from ID to send message to
                             await channeluser.send(embed=onyemb)
-                            dbref.execute('''delete from timers where users = ? and usertype = ?''', (userid[0], onytype,))
+                            dbref.execute('''delete from timers where users = ? and usertype = ?''', (userid[0], onytype,)) #Removes user from the notification list
                         dbopen.commit()
                     onyemb.clear_fields()
                 elif timertype == wcbtype:
@@ -170,13 +179,13 @@ async def real_notify():
                     dbref.execute('''update timers set timestamp = ? where timertype = ?''', (setnull, wcbtype,)) #Clears existing timer
                     wcbemb.add_field(name="Warchief's Window Opening: ", value=wcbbuff, inline=True)
                     await channel.send(embed=wcbemb)
-                    dbref.execute('''select users from timers where usertype = ?''', (wcbtype,))
+                    dbref.execute('''select users from timers where usertype = ?''', (wcbtype,)) #Selects user ids that DM bot requesting notification
                     userlist = dbref.fetchall()
                     if userlist is not None:
                         for userid in userlist:
-                            channeluser = bot.get_user(int(userid[0]))
+                            channeluser = bot.get_user(int(userid[0])) #Gets user object from ID to send message to
                             await channeluser.send(embed=wcbemb)
-                            dbref.execute('''delete from timers where users = ? and usertype = ?''', (userid[0], wcbtype,))
+                            dbref.execute('''delete from timers where users = ? and usertype = ?''', (userid[0], wcbtype,)) #Removes user from the notification list
                         dbopen.commit()
                     wcbemb.clear_fields()
             dbopen.commit()
