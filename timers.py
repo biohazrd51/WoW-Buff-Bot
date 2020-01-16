@@ -126,15 +126,23 @@ async def timers(ctx):
         await channel.send(embed=timeremb)
         timeremb.clear_fields()
 
-@bot.command(name='remindme', brief="Registers you for reminder DM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening\nExample: $remindme wcb")
+@bot.command(name='remindme', brief="Registers you for reminder DM", description="DM the bot this command with the buff type you'd like to have a reminder DM sent to you at the next window opening. Options are: ony, wcb, all\nExample: $remindme wcb\nThis MUST be in a DM to the bot. Typing this in the discord channel will not work.")
 async def remindme(ctx, arg1):
     if ctx.guild is None: #Determines is message is DM
-        usertype = arg1 #To be updated, valid args should be 'ony', 'wcb', and possibly 'all'
+        usertype = arg1
         userid = ctx.message.author.id
         channeluser = bot.get_user(userid) #Creates user object to DM from ID above
-        dbref.execute('''insert into timers(users, usertype) values (?,?)''', (userid, usertype,))
-        dbopen.commit()
-        await channeluser.send("Got it! I will send you a reminder!")
+        if usertype == 'all':
+            dbref.execute('''insert into timers (users, usertype) values (?,?),(?,?)''', (userid, 'ony', userid, 'wcb'))
+            dbopen.commit()
+            confirmation = "Got it! I'll send you a reminder!"
+        elif (usertype == 'ony' or usertype == 'wcb'):
+            dbref.execute('''insert into timers(users, usertype) values (?,?)''', (userid, usertype,))
+            dbopen.commit()
+            confirmation = "Got it! I'll send you a reminder!"
+        else:
+            confirmation = "Sorry! I don't recognize that timer type! Please select ony, wcb, or all"
+        await channeluser.send(confirmation)
 
 @bot.command(name='removeme', brief="Removes you from future notifications", description="Will remove you from ALL notification DMs until you re-register")
 async def removeme(ctx):
