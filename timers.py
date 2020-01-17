@@ -101,6 +101,8 @@ async def timers(ctx):
         timerdata = dbref.fetchall()
         if timerdata is not None: #Check if data exists before proceeding
             for timertype, timestamp, lastseen in timerdata:
+                if lastseen is None:
+                    lastseen = "Unknown"
                 if timestamp is None: #If timestamp does not exist, there is no currently set timer
                     if timertype == "ony":
                         onybuff = "Dragonslayer: \nNo timer is available.  \nLast turn in was seen at " + lastseen + '\n'
