@@ -110,6 +110,8 @@ async def timers(ctx):
                         wcbbuff = "Warchief's: \nNo timer is available. \nLast turn in was seen at " + lastseen + '\n'
                 elif timestamp is not None:
                     timestamp = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
+                    tzvar = timezone(bottime)
+                    timestamp = tzvar.localize(timestamp)
                     timenow = datetime.now(timezone(bottime))
                     timecalc = timestamp - timenow
                     timedursec = timecalc.total_seconds()
