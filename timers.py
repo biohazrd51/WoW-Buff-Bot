@@ -80,8 +80,7 @@ async def nef(ctx):
         channel = bot.get_channel(channelid)
         bufftype = "nef"
         timerset = datetime.now(timezone(bottime))
-        #timerplus = timerset + timedelta(hours=6)
-        timerplus = timerset + timedelta(minutes=10)
+        timerplus = timerset + timedelta(hours=6)
         dbref.execute('''update timers set timestamp = ?, lastseen = ? where timertype = ?''', (timerplus.strftime("%Y-%m-%d %H:%M:%S.%f"), timerset.strftime("%Y-%m-%d %H:%M"), bufftype))
         dbopen.commit()
         nefturnin = 'Got it! The head was turned in at ' + timerset.strftime("%Y-%m-%d %H:%M") + ' and the next window should open at ' + timerplus.strftime("%Y-%m-%d %H:%M")
