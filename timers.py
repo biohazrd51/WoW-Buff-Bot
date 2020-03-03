@@ -44,8 +44,8 @@ timeremb.set_thumbnail(url="https://i.imgur.com/nWXgNsz.jpg")
 
 #Variables to be used.  Channel ID required for specific channel use.  Bot key for bot to login
 #testchannelid = #Test channel, if needed: uncomment, switch bot.get_channel(channelid) from channelid to testchannelid
-channelid = 662331348052344832 #This restricts the bot to receiving commands, and speaking, only in this channel. Use discord permissions appropriately.
-botkey = 'NjY0MTkyOTU0NjY3MjM3Mzk0.Xl6mFA.cghD5sdOzZUJQX-4v2yspjejZ8Q'
+channelid = 0 #This restricts the bot to receiving commands, and speaking, only in this channel. Use discord permissions appropriately.
+botkey = ''
 bottime = 'US/Eastern' #Set to timezone of wow server
 
 @bot.command(name='info', brief="Info on the bot", description="Thrown together bot")
