@@ -7,6 +7,7 @@ This bot was developed for guild tracking of the Dragonslayer and Warchief's Ble
 
 * Setting Onyxia head turn in ($ony)
 * Setting Rend head turn in ($wcb)
+* Setting Nefarian head turn in ($nef)
 * Automatic alert roughly 3-5 minutes before next turn in is available
 * View timers showing last known turn in and time until next available turn in ($timers)
 
